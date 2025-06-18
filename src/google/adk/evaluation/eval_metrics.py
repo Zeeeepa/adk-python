@@ -19,9 +19,11 @@ from typing import Optional
 from pydantic import alias_generators
 from pydantic import BaseModel
 from pydantic import ConfigDict
+from pydantic import Field
 
 from .eval_case import Invocation
 from .evaluator import EvalStatus
+from google.genai import types as genai_types
 
 
 class EvalMetric(BaseModel):
@@ -37,6 +39,15 @@ class EvalMetric(BaseModel):
 
   threshold: float
   """A threshold value. Each metric decides how to interpret this threshold."""
+
+  judge_model: Optional[str] = Field(
+      default=None,
+      description="""The judge model to use for evaluation, if applicable. It can be a model name.""",
+  )
+
+  judge_model_config: Optional[genai_types.GenerateContentConfig] = Field(
+      default=None, description="""The configuration for the judge model."""
+  )
 
 
 class EvalMetricResult(EvalMetric):
